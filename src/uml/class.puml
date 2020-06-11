@@ -1,0 +1,11 @@
+@startuml
+class MyDataSource
+MyDataSource -up-> MyDriverManager : Uses to generate\n connections >
+MyDriverManager -left-> MyPooledConnection : generates
+MyDataSource o-right MyPooledConnection : maintains list of\n 10 MyPooledconnections
+MyPooledConnection o-down MyConnection : has 1
+MyConnectionPoolManager -up-> MyPooledConnection : maintains map of\n MyConnection and MyPooledConnection
+MyConnectionPoolManager -down-> MyConnection : maintains map of\n MyConnection and MyPooledConnection
+
+
+@enduml
