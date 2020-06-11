@@ -17,7 +17,8 @@ public class MyDataSource implements DataSource, ConnectionEventListener {
     private static final int MAX_CONNECTIONS = 10;
     private static final int TIMEOUT_SECS = 30;
     private int activeConnections = 0;
-    private List<PooledConnection> connectionList = new ArrayList<PooledConnection>();
+    private List<PooledConnection> freeConnectionList = new ArrayList<>();
+    private List<PooledConnection> usedConnectionList = new ArrayList<>();
 
     private MyDriverManager driverManager = null;
 
@@ -26,7 +27,7 @@ public class MyDataSource implements DataSource, ConnectionEventListener {
         this.driverManager = driverManager;
 
         for (int i = 0; i < MAX_CONNECTIONS; i++) {
-            connectionList.add(driverManager.getConnection());
+            freeConnectionList.add(driverManager.getConnection());
         }
     }
 
@@ -35,8 +36,9 @@ public class MyDataSource implements DataSource, ConnectionEventListener {
         do {
             synchronized (this) {
                 if (activeConnections < MAX_CONNECTIONS) {
-                    PooledConnection pooledConnection = connectionList.get(MAX_CONNECTIONS - 1 - activeConnections);
-                    connectionList.remove(MAX_CONNECTIONS - 1 - activeConnections);
+                    PooledConnection pooledConnection = freeConnectionList.get(MAX_CONNECTIONS - 1 - activeConnections);
+                    freeConnectionList.remove(MAX_CONNECTIONS - 1 - activeConnections);
+                    usedConnectionList.add(pooledConnection);
                     activeConnections++;
                     // Adding the ConnectionEventListener
                     pooledConnection.addConnectionEventListener(this);
@@ -63,7 +65,9 @@ public class MyDataSource implements DataSource, ConnectionEventListener {
 
     public void connectionClosed(ConnectionEvent event) {
         synchronized (this) {
-            connectionList.add((PooledConnection) event.getSource());
+            PooledConnection pooledConnection = (PooledConnection) event.getSource();
+            freeConnectionList.add(pooledConnection);
+            usedConnectionList.remove(pooledConnection);
             activeConnections--;
         }
 
