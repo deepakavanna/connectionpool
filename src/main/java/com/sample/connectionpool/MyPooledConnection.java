@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * PooledConnection implementation
+ */
 public class MyPooledConnection implements PooledConnection {
 
     List<ConnectionEventListener> list = new ArrayList<>();
@@ -33,7 +35,7 @@ public class MyPooledConnection implements PooledConnection {
         this.myConnection = myConnection;
     }
 
-// Prefer to use Lombok libraries.
+    // Prefer to use Lombok libraries.
 
     public boolean equals(Object o) {
         if (o == this) {
@@ -76,7 +78,12 @@ public class MyPooledConnection implements PooledConnection {
         return myConnection.getConnection();
     }
 
-    // release the connection back to DataSource
+    /**
+     *
+     * @throws SQLException
+     * release the connection back to DataSource
+     */
+
     public void close() throws SQLException {
         for (ConnectionEventListener connectionEventListener : list) {
             ConnectionEvent event = new ConnectionEvent(this);
@@ -84,11 +91,21 @@ public class MyPooledConnection implements PooledConnection {
         }
     }
 
-    // add the connectionEventListener so that it can be called when we close the connection
+
+
+    /**
+     *
+     * @param listener
+     * add the connectionEventListener so that it can be called when we close the connection
+     */
     public void addConnectionEventListener(ConnectionEventListener listener) {
         list.add(listener);
     }
 
+    /**
+     * Methods not supported
+     *
+     */
     public void addStatementEventListener(StatementEventListener listener) {
         throw new UnsupportedOperationException();
     }

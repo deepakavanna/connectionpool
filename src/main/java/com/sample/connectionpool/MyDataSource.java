@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * DataSource and ConnectionEventListener implementation
+ */
+
 public class MyDataSource implements DataSource, ConnectionEventListener {
 
     private static final int MAX_CONNECTIONS = 10;

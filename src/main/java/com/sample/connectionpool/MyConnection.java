@@ -20,6 +20,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * Connection object implementation.
+ */
 public class MyConnection implements Connection {
 
     /*
@@ -62,6 +65,7 @@ public class MyConnection implements Connection {
     }
 
     // Method needed for exercise
+
     public void close() throws SQLException {
         MyConnectionPoolManager.close(this);
     }
