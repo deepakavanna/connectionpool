@@ -10,6 +10,10 @@ import javax.sql.PooledConnection;
  */
 public class MyDriverManager  {
 
+    /**
+     * Simulates gets connection from JDBC DriverManager
+     * @return
+     */
     public PooledConnection getConnection() {
         MyConnection myConnection = new MyConnection();
         PooledConnection connection = new MyPooledConnection(myConnection);

@@ -35,6 +35,11 @@ public class MyDataSource implements DataSource, ConnectionEventListener {
         }
     }
 
+    /**
+     * Get the Connection object from the cached pool
+     * @return
+     * @throws SQLException
+     */
     public Connection getConnection() throws SQLException {
         long max = System.currentTimeMillis() + TIMEOUT_SECS * 1000;
         do {
@@ -66,7 +71,10 @@ public class MyDataSource implements DataSource, ConnectionEventListener {
         return activeConnections;
     }
 
-
+    /**
+     * Called from the eventListener
+     * @param event
+     */
     public void connectionClosed(ConnectionEvent event) {
         synchronized (this) {
             PooledConnection pooledConnection = (PooledConnection) event.getSource();

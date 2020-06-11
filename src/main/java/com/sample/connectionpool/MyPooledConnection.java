@@ -74,6 +74,11 @@ public class MyPooledConnection implements PooledConnection {
         this.myConnection =  myConnection;
     }
 
+    /**
+     * Gets connection object
+     * @return
+     * @throws SQLException
+     */
     public Connection getConnection() throws SQLException {
         return myConnection.getConnection();
     }
